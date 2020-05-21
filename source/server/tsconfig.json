@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "sourceMap": true,
+
+    "outDir": "../../services/server/bin",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@ff/core/*": [ "../../libs/ff-core/source/*" ]
+    }
+  },
+  "references": [
+    { "path": "../../libs/ff-core/tsconfig.json" }
+  ],
+  "files": [
+    "index.ts"
+  ]
+}

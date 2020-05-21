@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  server:
+    image: framefactory/node
+    container_name: montage-server
+    restart: always
+
+    command: [ "npm", "run", "$NPM_SCRIPT" ]
+
+    environment:
+      - WATCH_COMPONENT
+    env_file:
+      - .env
+    ports:
+      - $DOCKER_SERVER_PORT:$DOCKER_SERVER_PORT
+    volumes:
+      - .:/app
+    links:
+      - db
+    depends_on:
+      - db
+
+  db:
+    image: mongo:latest
+    container_name: montage-mongo
+    restart: always
+
+    env_file:
+      - .env
+    volumes:
+      - ./services/db/data:/data/db
+#      - mongo_data:/data/db
+#      - ./services/db/setup:/docker-entrypoint-initdb.d
+
+  db_gui:
+    image: mongo-express:latest
+    container_name: montage-mongo-express
+    restart: always
+
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=db
+    env_file:
+      - .env
+    ports: #host:container
+      - $DOCKER_DB_PORT:8081
+    links:
+      - db
+    depends_on:
+      - db
+#    command: [ "sh", "-c", "sleep 5 && tini -s -- node app" ]
+
+#volumes:
+#  mongo_data: {}

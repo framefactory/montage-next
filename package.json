@@ -1,0 +1,85 @@
+{
+  "name": "montage-next",
+  "version": "1.0.0",
+  "description": "Multi-display framework for smart devices",
+  "scripts": {
+    "start": "npm run server",
+    "server": "tsc -b source/server; nodemon services/server/bin/index.js",
+    "dev": "tsc -b source/server; concurrently \"cd source/client && webpack --color -w --mode=development --component=all\" \"tsc -b -w source/server\" \"nodemon services/server/bin/index.js\"",
+    "dev:component": "tsc -b source/server; concurrently \"cd source/client && webpack --color -w --mode=development --component=$WATCH_COMPONENT\" \"tsc -b -w source/server\" \"nodemon services/server/bin/index.js\"",
+    "build": "concurrently \"npm run build:client\" \"npm run build:server\"",
+    "build:server": "tsc -b source/server",
+    "build:client": "cd source/client; webpack --color --component=all; cd ../..",
+    "build:client:prod": "cd source/client; webpack --color --component=all --mode=production; cd ../..",
+    "build:client:dev": "cd source/client; webpack --color --component=all --mode=development; cd ../..",
+    "clean": "rm -rf services/server/bin; rm -rf services/server/public/built",
+    "up": "bash -c 'WATCH_COMPONENT=${0/#bash/all} NPM_SCRIPT=dev:component docker-compose up -d; docker-compose logs -f'",
+    "down": "docker-compose stop; docker-compose rm -f -v",
+    "restart": "npm run down; npm run up",
+    "install": "docker-compose exec server npm install",
+    "bash": "docker-compose exec server bash"
+  },
+  "nodemonConfig": {
+    "delay": 500,
+    "watch": [
+      "services/server/bin/**/*"
+    ]
+  },
+  "_moduleAliases": {
+    "@ff/core": "libs/ff-core/built/export"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/framefactory/montage-next.git"
+  },
+  "contributors": [
+    {
+      "name": "Ralph Wiedemeier",
+      "url": "https://github.com/framefactory"
+    }
+  ],
+  "license": "MIT",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/framefactory/montage-next/issues"
+  },
+  "homepage": "https://github.com/framefactory/montage-next#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "express-ws": "^4.0.0",
+    "lit-element": "^2.3.1",
+    "lit-html": "^1.2.1",
+    "mongodb": "^3.5.7",
+    "morgan": "^1.10.0",
+    "passport": "^0.4.1",
+    "qrcode": "^1.4.4"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.4",
+    "child_process": "^1.0.2",
+    "concurrently": "^5.2.0",
+    "css-loader": "^3.5.3",
+    "dotenv": "^8.2.0",
+    "file-loader": "^6.0.0",
+    "handlebars": "^4.7.6",
+    "handlebars-loader": "^1.7.1",
+    "html-webpack-plugin": "^4.2.2",
+    "mini-css-extract-plugin": "^0.9.0",
+    "mkdirp": "^1.0.4",
+    "module-alias": "^2.2.2",
+    "node-sass": "^4.14.1",
+    "nodemon": "^2.0.4",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "prettier": "^2.0.5",
+    "raw-loader": "^4.0.1",
+    "sass-loader": "^8.0.2",
+    "source-map-loader": "^0.2.4",
+    "terser-webpack-plugin": "^2.3.6",
+    "ts-loader": "^7.0.4",
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  }
+}
